@@ -14,6 +14,8 @@
     
   ];
 
+  wsl.startMenuLaunchers = true;
+
   programs.gnupg.agent = {
     pinentryPackage = pkgs.pinentry-qt;
   };
