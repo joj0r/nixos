@@ -29,6 +29,11 @@ vim.g.mapleader = " "
 -- Search sould not be case sensitive
 vim.o.ignorecase = true
 
+-- Git blame
+require('gitblame').setup {
+  enabled = true,
+}
+
 -- lazy.nvim
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 
@@ -52,7 +57,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- LSP and autocomplete
   { 'VonHeikemen/lsp-zero.nvim',        branch = 'v4.x' },
-  { 'williamboman/mason.nvim' },
+  -- { 'williamboman/mason.nvim' },
   { 'williamboman/mason-lspconfig.nvim' },
   { 'neovim/nvim-lspconfig' },
   { 'hrsh7th/cmp-nvim-lsp' },
@@ -225,6 +230,13 @@ require('lualine').setup {
 }
 
 -- LSP configurations ---
+
+vim.lsp.enable('lua_ls')
+vim.lsp.enable('ts_ls')
+vim.lsp.enable('biome')
+vim.lsp.enable('jinja-lsp')
+vim.lsp.enable('jedi-language-server')
+vim.lsp.enable('marksman')
 --
 -- Reserve a space in the gutter
 -- This will avoid an annoying layout shift in the screen
@@ -260,14 +272,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 -- Mason for autoinstall of LSP servers
-require('mason').setup({})
-require('mason-lspconfig').setup({
-  handlers = {
-    function(server_name)
-      require('lspconfig')[server_name].setup({})
-    end,
-  },
-})
+-- require('mason').setup({})
+-- require('mason-lspconfig').setup({
+--   handlers = {
+--     function(server_name)
+--       require('lspconfig')[server_name].setup({})
+--     end,
+--   },
+-- })
 
 -- Auto completion settings
 local has_words_before = function()

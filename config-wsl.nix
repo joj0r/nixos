@@ -14,6 +14,7 @@
     
   ];
 
+  wsl.defaultUser = "jonas";
   wsl.startMenuLaunchers = true;
 
   programs.gnupg.agent = {
