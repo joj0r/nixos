@@ -38,7 +38,7 @@
 
       # Ledger regnskap.ledger
       lrbal = ''ledger -f regnskap.ledger bal \(assets liabilities klatrekort\) and not \(Pensjon or PetraAsk\) -V'';
-      lrbud = "ledger -f regnskap.ledger budget -p \"this month\" exp";
+      lrbud = "ledger -f regnskap.ledger budget -p \"this month\" exp inc lia ass --real";
 
 
       # Bluetooth connect SRS-XB3
