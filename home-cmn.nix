@@ -17,6 +17,9 @@
     tree # List dir as tree
     ledger
     taskwarrior3
+    taskwarrior-tui
+    # terminal file browser
+    yazi
 
     nyxt # Hackers web browser
 
@@ -26,7 +29,6 @@
     cargo # Installed for rnix_lsp
 
     # Passwordstore with git-integration
-    pinentry-tty
     pass
     pass-git-helper
 
@@ -36,6 +38,14 @@
     lazygit
     starship # command prompt
     jq # JSON utils
+
+    # LSP's
+    typescript-language-server
+    lua-language-server
+    biome
+    jinja-lsp
+    marksman
+
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -62,33 +72,19 @@
     enable = true;
     vimAlias = true;
     defaultEditor = true;
+    withNodeJs = true;
     extraPython3Packages = pyPkgs: with pyPkgs;
-      [ six packaging tasklib ];
+      [ 
+        six 
+        packaging 
+        tasklib 
+        jedi-language-server
+      ];
     plugins = with pkgs.vimPlugins; [
       nvim-treesitter.withAllGrammars
+      nvim-lspconfig
+      git-blame-nvim
     ];
-  };
-
-
-  programs.git = {
-    enable = true;
-    userName = "Jonas Stene";
-    userEmail = "jonas@stene.li";
-    extraConfig = {
-      init = {
-	      defaultBranch = "main";
-      };
-      merge = { tool = "vimdiff"; };
-      mergetool = { path = "nvim"; };
-      credential = {
-        helper = "${pkgs.pass-git-helper}/bin/pass-git-helper";
-        useHttpPath = true;
-      };
-      #commit = {
-      #  gpgsign = true;
-      #};
-      safe.directory = "/etc/nixos/";
-    };
   };
 
 
@@ -105,8 +101,6 @@
     #   org.gradle.console=verbose
     #   org.gradle.daemon.idletimeout=3600000
     # '';
-
-    ".taskrc".source = dotfiles/taskrc;
 
     ".config/pass-git-helper/git-pass-mapping.ini".source = dotfiles/git-pass-mapping.ini;
 
