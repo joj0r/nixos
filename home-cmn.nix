@@ -21,7 +21,7 @@
     nyxt # Hackers web browser
 
     # For clipboard support
-    wl-clipboard
+    # wl-clipboard
 
     cargo # Installed for rnix_lsp
 
@@ -84,10 +84,12 @@
         helper = "${pkgs.pass-git-helper}/bin/pass-git-helper";
         useHttpPath = true;
       };
+      #commit = {
+      #  gpgsign = true;
+      #};
       safe.directory = "/etc/nixos/";
     };
   };
-
 
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
