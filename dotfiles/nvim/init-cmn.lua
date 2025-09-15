@@ -31,7 +31,7 @@ vim.o.ignorecase = true
 
 -- Git blame
 require('gitblame').setup {
-  enabled = true,
+  enabled = false,
 }
 
 -- lazy.nvim
