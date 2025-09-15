@@ -41,19 +41,24 @@
     extraLuaConfig = lib.fileContents dotfiles/nvim/init-wsl.lua;
   };
 
+  programs.taskwarrior = {
+    enable = true;
+    package = pkgs.taskwarrior3;
+    extraConfig = ''
+      include /etc/nixos/dotfiles/taskrc
+      # Files
+      data.location=/home/jonas/.task
+      sync.local.server_dir=/mnt/c/Users/nojojo/Nextcloud/Tasks
+      news.version=3.4.1
+    '';
+  };
+
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = {
 
     ".npmrc".source = dotfiles/npmrc;
-    ".taskrc".text = ''
-      include /etc/nixos/dotfiles/taskrc
-      # Files
-      data.location=/home/jonas/.task
-      sync.local.server_dir=/mnt/c/Users/nojojo/Nextcloud/Tasks
-      news.version=3.3.0
-    '';
     "notes/vimwiki".source = config.lib.file.mkOutOfStoreSymlink "/mnt/c/Users/nojojo/Nextcloud/Notes/vimwiki/";
 
   };
