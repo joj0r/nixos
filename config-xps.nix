@@ -81,6 +81,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     pinentry-gnome3
+    ipmiview # For Supermicro server
   ];
 
 }
