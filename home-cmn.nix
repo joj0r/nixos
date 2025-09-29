@@ -23,7 +23,7 @@
     nyxt # Hackers web browser
 
     # For clipboard support
-    wl-clipboard
+    # wl-clipboard
 
     cargo # Installed for rnix_lsp
 
@@ -85,8 +85,6 @@
       git-blame-nvim
     ];
   };
-
-
 
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage

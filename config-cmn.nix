@@ -46,7 +46,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jonas = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "nixos" ]; 
+    extraGroups = [ "wheel" "networkmanager" "nixos" "docker" ]; 
   };
 
   users.users.root = {
