@@ -16,7 +16,6 @@
   home.packages = with pkgs; [
     tree # List dir as tree
     ledger
-    taskwarrior3
     taskwarrior-tui
     # terminal file browser
     yazi
