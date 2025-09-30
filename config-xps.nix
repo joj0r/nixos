@@ -25,6 +25,8 @@
     ];
   };
 
+  boot.loader.timeout = 1;
+
   fileSystems."/" =
     { device = "zpool/root";
       fsType = "zfs";
