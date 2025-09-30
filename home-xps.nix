@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./hyprland-home.nix
+    #./hyprland-home.nix
     ./home-cmn.nix
   ];
 

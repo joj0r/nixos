@@ -6,7 +6,7 @@
       # Neovim system wide config
       ./config-cmn.nix
       ./gnome.nix
-      ./hyprland.nix
+      # ./hyprland.nix
     ];
 
   # Enable bluetooth
