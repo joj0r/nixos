@@ -1,5 +1,38 @@
--- Get file for local adjustments
-vim.cmd('source ~/dotfiles/local_arch.lua')
+
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- Disable tmux navigator when zooming the Vim pane
+vim.g.tmux_navigator_disable_when_zoomed = 1
+
+-- Set numbers
+vim.opt.number = true
+vim.opt.relativenumber = true
+
+-- Set tabwidth to 2 and spaces instead of numbers
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+
+vim.opt.smartindent = true
+vim.opt.swapfile = false
+vim.opt.backup = true
+vim.opt.backupdir = os.getenv("HOME") .. "/.vim/backup"
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true
+
+vim.opt.scrolloff = 8
+
+-- Set leader to spacebar
+vim.g.mapleader = " "
+
+-- Search sould not be case sensitive
+vim.o.ignorecase = true
+
+-- Git blame
+require('gitblame').setup {
+  enabled = false,
+}
 
 -- lazy.nvim
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
@@ -24,7 +57,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- LSP and autocomplete
   { 'VonHeikemen/lsp-zero.nvim',        branch = 'v4.x' },
-  { 'williamboman/mason.nvim' },
+  -- { 'williamboman/mason.nvim' },
   { 'williamboman/mason-lspconfig.nvim' },
   { 'neovim/nvim-lspconfig' },
   { 'hrsh7th/cmp-nvim-lsp' },
@@ -53,7 +86,17 @@ require('lazy').setup({
       {"<C-l>", function()require("kitty-navigator").navigateRight()end, desc = "Move right a Split", mode = {"n"}},
     },
   },
-  { 'preservim/nerdtree' },
+  {
+    "nvim-tree/nvim-tree.lua",
+    version = "*",
+    lazy = false,
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("nvim-tree").setup {}
+    end,
+  },
   { 'AndrewRadev/splitjoin.vim' },
   { 'tpope/vim-surround' },
 
@@ -72,34 +115,73 @@ require('lazy').setup({
   },
   -- Git
   { 'tpope/vim-fugitive' },
+  -- Markdown preview installed for PlantUML
+  {
+    'https://github.com/Groveer/plantuml.nvim',
+    version = '*',
+    config = function()
+      require('plantuml').setup({
+        renderer = {
+          type = 'text',
+          options = {
+            split_cmd = 'vsplit', -- Allowed values: 'split', 'vsplit'.
+          }
+        },
+        render_on_write = true, -- Set to false to disable auto-rendering.
+      })
+    end,
+  },
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    build = "cd app && yarn install",
+    init = function()
+      vim.g.mkdp_filetypes = { "markdown" }
+      vim.g.mkdp_echo_preview_url = 1
+    end,
+    ft = { "markdown" },
+  },
+  -- terminal inside nvim
+  {
+    'akinsho/toggleterm.nvim',
+    version = "*",
+    lazy = true,
+    opts = {
+      close_on_exit = true,
+      shade_terminals = false,
+      --[[ things you want to change go here]]
+    },
+    cmd = { "ToggleTerm" },
+    keys = {
+      { "<leader>g", "<cmd>lua _lazygit_toggle()<CR>", desc = "Open LazyGit terminal", mode = { "n" } },
+      { "<leader>ø", "<cmd>:ToggleTerm<CR>", desc = "Open bottom terminal", mode = { "n", "t" } },
+      { "<leader><esc>", "<C-\\><C-n>", desc = "Exit insert mode in terminal", mode = { "t" } },
+
+      { "<C-h>", "<cmd>:wincmd h<CR>", desc = "Move to window on the left", mode = { "t" } },
+      { "<C-j>", "<cmd>:wincmd j<CR>", desc = "Move to window below", mode = { "t" } },
+      { "<C-k>", "<cmd>:wincmd k<CR>", desc = "Move to window above", mode = { "t" } },
+      { "<C-l>", "<cmd>:wincmd l<CR>", desc = "Move to window on the right", mode = { "t" } },
+    }
+  }
 })
 
--- Disable tmux navigator when zooming the Vim pane
-vim.g.tmux_navigator_disable_when_zoomed = 1
 
--- Set numbers
-vim.opt.number = true
-vim.opt.relativenumber = true
+-- Cutsom terminal for lazygit
+local Terminal = require('toggleterm.terminal').Terminal
+local lazygit  = Terminal:new({
+  cmd = "lazygit",
+  direction = "float",
+  float_opts = {
+    width = vim.o.columns - 10,
+    height = vim.o.lines - 5,
+    border = "curved",
+  },
+  hidden = true,
+})
 
--- Set tabwidth to 2 and spaces instead of numbers
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.expandtab = true
-
--- From thePrimeagen
-vim.opt.smartindent = true
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
-vim.opt.undofile = true
-
-vim.opt.scrolloff = 8
-
--- Set leader to spacebar
-vim.g.mapleader = " "
-
--- Search sould not be case sensitive
-vim.o.ignorecase = true
+function _lazygit_toggle()
+  lazygit:toggle()
+end
 
 -- Vim-ledger
 -- Fussy account and details first on search
@@ -124,10 +206,10 @@ vim.g.splitjoin_join_mapping = ''
 vim.keymap.set('n', '<leader>j', '<cmd>:SplitjoinJoin<CR>')
 vim.keymap.set('n', '<leader>s', '<cmd>:SplitjoinSplit<CR>')
 
---- Nerdtree remaping
-vim.keymap.set('n', '<leader>n', '<cmd>:NERDTreeFocus<CR>')
+--- NvimTree remaping
+vim.keymap.set('n', '<leader>n', '<cmd>:NvimTreeFocus<CR>')
 vim.keymap.set('n', '<C-n>', '<cmd>:NERDTree<CR>')
-vim.keymap.set('n', '<C-t>', '<cmd>:NERDTreeToggle<CR>')
+vim.keymap.set('n', '<C-t>', '<cmd>:NvimTreeToggle<CR>')
 vim.keymap.set('n', '<C-f>', '<cmd>:NERDTreeFind<CR>')
 
 -- Telescope remapping
@@ -148,6 +230,13 @@ require('lualine').setup {
 }
 
 -- LSP configurations ---
+
+vim.lsp.enable('lua_ls')
+vim.lsp.enable('ts_ls')
+vim.lsp.enable('biome')
+vim.lsp.enable('jinja-lsp')
+vim.lsp.enable('jedi-language-server')
+vim.lsp.enable('marksman')
 --
 -- Reserve a space in the gutter
 -- This will avoid an annoying layout shift in the screen
@@ -183,14 +272,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 -- Mason for autoinstall of LSP servers
-require('mason').setup({})
-require('mason-lspconfig').setup({
-  handlers = {
-    function(server_name)
-      require('lspconfig')[server_name].setup({})
-    end,
-  },
-})
+-- require('mason').setup({})
+-- require('mason-lspconfig').setup({
+--   handlers = {
+--     function(server_name)
+--       require('lspconfig')[server_name].setup({})
+--     end,
+--   },
+-- })
 
 -- Auto completion settings
 local has_words_before = function()
