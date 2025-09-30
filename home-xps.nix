@@ -80,5 +80,6 @@
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = {
+    ".config/autostart/com.nextcloud.desktopclient.nextcloud.desktop".source = "${pkgs.nextcloud-client}/share/applications/com.nextcloud.desktopclient.nextcloud.desktop";
   };
 }
