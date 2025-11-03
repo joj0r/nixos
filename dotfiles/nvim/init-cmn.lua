@@ -208,6 +208,99 @@ require('lazy').setup({
       },
     },
   },
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-neotest/nvim-nio",
+      "nvim-lua/plenary.nvim",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "marilari88/neotest-vitest"
+    },
+    config = function()
+      -- Testing --
+      require("neotest").setup({
+        adapters = {
+          require("neotest-vitest"),
+        },
+      })
+    end,
+    keys = {
+      {
+        "<leader>nr",
+        "<cmd>lua require('neotest').run.run()<cr>",
+        desc = "Run nearest test",
+        mode = { "n" },
+      },
+      {
+        "<leader>nf",
+        "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<cr>",
+        desc = "Run current file",
+        mode = { "n" },
+      },
+      {
+        "<leader>na",
+        "<cmd>lua require('neotest').run.run({ suite = true })<cr>",
+        desc = "Run all tests",
+        mode = { "n" },
+      },
+      {
+        "<leader>nd",
+        "<cmd>lua require('neotest').run.run({strategy = 'dap'})<cr>",
+        desc = "Debug nearest test",
+        mode = { "n" },
+      },
+      {
+        "<leader>ns",
+        "<cmd>lua require('neotest').run.stop()<cr>",
+        desc = "Stop test",
+        mode = { "n" },
+      },
+      {
+        "<leader>nn",
+        "<cmd>lua require('neotest').run.attach()<cr>",
+        desc = "Attach to nearest test",
+        mode = { "n" },
+      },
+      {
+        "<leader>no",
+        "<cmd>lua require('neotest').output.open()<cr>",
+        desc = "Show test output",
+        mode = { "n" },
+      },
+      {
+        "<leader>np",
+        "<cmd>lua require('neotest').output_panel.toggle()<cr>",
+        desc = "Toggle output panel",
+        mode = { "n" },
+      },
+      {
+        "<leader>nv",
+        "<cmd>lua require('neotest').summary.toggle()<cr>",
+        desc = "Toggle summary",
+        mode = { "n" },
+      },
+      {
+        "<leader>nc",
+        "<cmd>lua require('neotest').run.run({ suite = true, env = { CI = true } })<cr>",
+        desc = "Run all tests with CI",
+        mode = { "n" },
+      },
+      {
+        "<leader>nwr",
+        "<cmd>lua require('neotest').run.run({ vitestCommand = 'vitest --watch' })<cr>",
+        desc = "Run Watch",
+        mode = { "n" },
+      },
+      {
+        "n",
+        "<leader>nwf",
+        "<cmd>lua require('neotest').run.run({ vim.fn.expand('%'), vitestCommand = 'vitest --watch' })<cr>",
+        desc = "Run Watch File",
+        mode = { "n" },
+      }
+    }
+  },
 })
 
 

@@ -90,6 +90,9 @@
       nvim-treesitter.withAllGrammars
       nvim-lspconfig
       git-blame-nvim
+      # Testing
+      neotest
+      neotest-vitest
       # Copiliot
       # {
       #   plugin = copilot-vim;
