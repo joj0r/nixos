@@ -49,6 +49,8 @@ in
     extraGroups = [ "wheel" "networkmanager" "nixos" "docker" ]; 
   };
 
+  virtualisation.docker.enable = true;
+
   users.users.root = {
     extraGroups = [ "nixos" ];
   };
