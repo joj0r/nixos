@@ -6,6 +6,7 @@
       # Neovim system wide config
       ./config-cmn.nix
       ./gnome.nix
+      # ./hyprland.nix
     ];
 
   # Enable bluetooth
@@ -23,6 +24,8 @@
       { devices = [ "nodev"]; path = "/boot"; }
     ];
   };
+
+  boot.loader.timeout = 1;
 
   fileSystems."/" =
     { device = "zpool/root";
@@ -76,10 +79,15 @@
   programs.firefox.enable = true;
   # programs.hyprland.enable = true;
 
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+    "IPMIView"
+  ];
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     pinentry-gnome3
+    ipmiview # For Supermicro server
   ];
 
 }
