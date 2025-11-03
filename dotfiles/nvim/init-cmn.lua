@@ -107,6 +107,7 @@ require('lazy').setup({
     'nvim-telescope/telescope-fzf-native.nvim',
     build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release'
   },
+  { 'nvim-telescope/telescope-ui-select.nvim' },
   {
     'nvim-lualine/lualine.nvim',
     dependencies = {
@@ -162,7 +163,51 @@ require('lazy').setup({
       { "<C-k>", "<cmd>:wincmd k<CR>", desc = "Move to window above", mode = { "t" } },
       { "<C-l>", "<cmd>:wincmd l<CR>", desc = "Move to window on the right", mode = { "t" } },
     }
-  }
+  },
+  {
+    "zbirenbaum/copilot-cmp",
+    event = "InsertEnter",
+    config = function() require("copilot_cmp").setup() end,
+    dependencies = {
+      "zbirenbaum/copilot.lua",
+      cmd = "Copilot",
+      config = function()
+        require("copilot").setup({
+          suggestion = { enabled = false },
+          panel = { enabled = false },
+        })
+      end,
+    },
+  },
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    dependencies = {
+      { "nvim-lua/plenary.nvim", branch = "master" },
+    },
+    build = "make tiktoken",
+    opts = {
+      -- See Configuration section for options
+      window = {
+        layout = 'vertical',
+        width = 0.5, -- Fixed width in columns
+      },
+      auto_insert_mode = true,
+      mappings = {
+        reset = {
+          insert = "",
+          normal = "",
+        },
+      },
+    },
+    keys = {
+      {
+        "<leader>cc",
+        "<cmd>CopilotChat<cr>",
+        desc = "Open Copilot Chat",
+        mode = { "n" },
+      },
+    },
+  },
 })
 
 
@@ -219,6 +264,16 @@ vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live gr
 vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
 
+require('telescope').setup {
+  extensions = {
+    ["ui-select"] = {
+      require("telescope.themes").get_dropdown {},
+    }
+  }
+}
+
+require('telescope').load_extension('ui-select')
+
 -- Colorscheme
 vim.opt.termguicolors = true
 vim.cmd.colorscheme('tokyonight')
@@ -237,6 +292,7 @@ vim.lsp.enable('biome')
 vim.lsp.enable('jinja-lsp')
 vim.lsp.enable('jedi-language-server')
 vim.lsp.enable('marksman')
+
 --
 -- Reserve a space in the gutter
 -- This will avoid an annoying layout shift in the screen
@@ -292,6 +348,7 @@ local cmp = require('cmp')
 
 cmp.setup({
   sources = {
+    { name = "copilot" },
     { name = 'nvim_lsp' },
   },
   mapping = cmp.mapping.preset.insert({

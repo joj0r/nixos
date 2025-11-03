@@ -67,6 +67,10 @@
     };
   };
 
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+    "copilot.vim"
+  ];
+
   programs.neovim = {
     enable = true;
     vimAlias = true;
@@ -79,10 +83,21 @@
         tasklib 
         jedi-language-server
       ];
+    extraLuaPackages = [
+      pkgs.lua53Packages.tiktoken_core
+    ];
     plugins = with pkgs.vimPlugins; [
       nvim-treesitter.withAllGrammars
       nvim-lspconfig
       git-blame-nvim
+      # Copiliot
+      # {
+      #   plugin = copilot-vim;
+      #   config = "require('copilot').setup()";
+      #   type = "lua";
+      # }
+      # CopilotChat-nvim
+      # copilot-cmp
     ];
   };
 
