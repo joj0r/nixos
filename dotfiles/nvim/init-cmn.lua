@@ -230,6 +230,10 @@ require('lualine').setup {
 }
 
 -- LSP configurations ---
+vim.lsp.config('qmlls', {
+  cmd = {'qmlls', '-E'},
+  filetypes = { 'qml', 'qmljs' },
+})
 
 vim.lsp.enable('lua_ls')
 vim.lsp.enable('ts_ls')
