@@ -38,4 +38,4 @@ vim.g.vimwiki_list = {{
 }}
 
 -- Get common file
-vim.cmd('source /etc/nixos/dotfiles/nvim/init-cmn.lua')
+vim.cmd('source /home/jonas/nixos/dotfiles/nvim/init-cmn.lua')
